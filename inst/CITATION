@@ -1,0 +1,15 @@
+citHeader("To cite npphen in publications use:")
+
+citEntry(entry = "Manual",
+  title        = "{npphen}: An R package for estimating annual phenological cycle",
+  author       = personList(as.person("Roberto O. Chávez"),
+                   as.person("Sergio A. Estay"),as.person("Carlos G. Riquelme")),
+  year         = "2017",
+  textVersion  =
+  paste("Chávez, R.O., Estay, S.A., Riquelme, C.G. (2017).",
+        "npphen. An R package for estimating annual phenological cycle.",
+        "Uach, PUCV, Chile.")
+)
+
+
+
