@@ -1,5 +1,6 @@
 #' @title PhenMap
 #' @description Estimates annual Land Surface Phenology (LSP) using time series of  a vegetation greenness raster stack.
+#' @encoding UTF-8
 #' @param s	Raster stack with greenness (e,g. NDVI or EV) values
 #' @param dates	Vector with dates at which the greenness values were recorded
 #' @param h	Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
@@ -13,7 +14,7 @@
 #' @return RasterStack
 #' @seealso \code{\link{Phen}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 #'
 #' ## Testing North Hemisphere data. Raster data from Slovenia (EVI index), h=1 ##
@@ -34,8 +35,8 @@
 #'
 #' PhenMap(s=Slovenia_rasters,dates=Slovenia_dates,h=1,nGS=23, nCluster=nc1,
 #' outname="phen_slov.tif", format="GTiff", datatype="FLT4S",rge=c(0,10000))
-#' map1<-raster("phen_slov.tif")
-#' plot(map1)
+#' #map1<-raster("phen_slov.tif")#run only for load phenology brick
+#' #plot(map1)
 #'
 #' ## Testing South Hemisphere data. Raster data from Chile (EVI index), h=2 ##
 #'
@@ -52,8 +53,8 @@
 #'
 #' PhenMap(s= Aysen_rasters,dates=Aysen_dates,h=2,nGS=23, nCluster=nc1,
 #' outname="phen_aysen.tif", format="GTiff", datatype="FLT4S",rge=c(0,10000))
-#' map2<-raster("phen_aysen.tif")
-#' plot(map2)
+#' #map2<-raster("phen_aysen.tif") #run only for load phenology brick
+#' #plot(map2)
 #' }
 #' @export
 

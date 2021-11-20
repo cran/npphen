@@ -1,5 +1,6 @@
 #' @title PhenKplot
 #' @description Plot the most probable vegetation greenness values.
+#' @encoding UTF-8
 #' @param x	Numeric vector with greenness values
 #' @param dates	Vector with dates at which the greenness values were recorded
 #' @param h	Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
@@ -11,7 +12,6 @@
 #' @seealso \code{\link{Phen}}
 #' @examples
 #' \donttest{
-#' library(rts)
 #' library(lubridate)
 #'
 #' ## Testing North Hemisphere data. Raster data from Slovenia (EVI index), h=1 ##
@@ -24,15 +24,13 @@
 #' Slovenia_dates <- as.Date(sl_dates$date, format='%d/%m/%Y')
 #'
 #' # Generate a Raster time series using a raster stack and a date database from Slovenia
-#' sl_ts<-rts(Slovenia_rasters,Slovenia_dates)
-#'
 #' # Obtain data from a particular pixel generating a time series
-#' sl_pixel<-cellFromXY(sl_ts,c(474368,5096979))
-#' sl_pixelts<-extract(sl_ts,sl_pixel)
-#' plot(sl_pixelts)
+#' sl_pixel<-cellFromXY(Slovenia_rasters,c(474368,5096979))
+#' sl_pixelts<-as.numeric(Slovenia_rasters[sl_pixel])
+#' plot(Slovenia_dates,sl_pixelts, type='l')
 #'
 #' # Phenology for the given pixel
-#' PhenKplot(x=as.vector(sl_pixelts),dates=Slovenia_dates,h=1,nGS=23, xlab="DOY",
+#' PhenKplot(x=sl_pixelts,dates=Slovenia_dates,h=1,nGS=23, xlab="DOY",
 #' ylab="EVI", rge=c(0,10000))
 #'
 #'
@@ -46,15 +44,13 @@
 #' Aysen_dates <- as.Date(ay_dates$date, format='%d/%m/%Y')
 #'
 #' # Generate a Raster time series using a raster stack and a date database from Aysen
-#' ay_ts<-rts(Aysen_rasters,Aysen_dates)
-#'
 #' # Obtain data from a particular pixel generating a time series
-#' ay_pixel<-cellFromXY(ay_ts,c(228373,4806975))
-#' ay_pixelts<-extract(ay_ts,ay_pixel)
-#' plot(ay_pixelts)
+#' ay_pixel<-cellFromXY(Aysen_rasters,c(228373,4806975))
+#' ay_pixelts<-as.numeric(Aysen_rasters[ay_pixel])
+#' plot(Aysen_dates,ay_pixelts, type = 'l')
 #'
 #' # Phenology for the given pixel
-#' PhenKplot(x=as.vector(ay_pixelts),dates=Aysen_dates,h=2,nGS=23, xlab="DOY",
+#' PhenKplot(x=ay_pixelts,dates=Aysen_dates,h=2,nGS=23, xlab="DOY",
 #' ylab="EVI", rge=c(0,10000))
 #'}
 #' @export

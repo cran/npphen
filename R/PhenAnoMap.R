@@ -1,5 +1,6 @@
 #' @title PhenAnoMap
 #' @description Calculates anomalies with respect to the regular phenological cycle using time series (raster) of vegetation greenness.
+#' @encoding UTF-8
 #' @param s	Raster stack with greenness (e,g. NDVI or EV) values
 #' @param dates	Vector with dates at which the greenness values were recorded
 #' @param h	Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)
@@ -14,7 +15,7 @@
 #' @return RasterStack
 #' @seealso \code{\link{PhenAnoma}}
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 #'
 #' ## Testing North Hemisphere data. Raster data from Slovenia (EVI index), h=1 ##
@@ -36,8 +37,8 @@
 #'
 #' PhenAnoMap(s=Slovenia_rasters,dates=Slovenia_dates,h=1,refp=c(1:342), anop=c(343:365),
 #' nCluster=nc1,outname="ano_slov.tif", format="GTiff", datatype="FLT4S", rge=c(0,10000))
-#' map_an1<-raster("ano_slov.tif")
-#' plot(map_an1)
+#' #map_an1<-raster("ano_slov.tif")#run only for load anomaly brick
+#' #plot(map_an1)
 #'
 #'
 #' ## Testing South Hemisphere data. Raster data from Chile (EVI index), h=2 ##
@@ -55,8 +56,8 @@
 #'
 #' PhenAnoMap(s=Aysen_rasters,dates=Aysen_dates,h=2,refp=c(1:354), anop=c(309:331),
 #' nCluster=nc1,outname="ano_aysen.tif", format="GTiff", datatype="FLT4S",rge=c(0,10000))
-#' map_an2<-raster("ano_aysen.tif")
-#' plot(map_an2)
+#' #map_an2<-raster("ano_aysen.tif")#run only for load anomaly brick
+#' #plot(map_an2)
 #'
 #'}
 #' @export
