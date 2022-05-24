@@ -5,21 +5,21 @@
 \alias{Phen}
 \title{Phen}
 \usage{
-Phen(x, dates, h, nGS, rge)
+Phen(x, dates, h, frequency = "16-days", rge)
 }
 \arguments{
-\item{x}{Numeric vector with greenness values}
+\item{x}{Numeric vector. A time series of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input values if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
 
-\item{dates}{Vector with dates at which the greenness values were recorded}
+\item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
 
 \item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)}
 
-\item{nGS}{Numeric. Number of greenness values within a single growing season. For example, nGS=23 for MODIS    Vegetation Index 16-days composites}
+\item{frequency}{Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).}
 
-\item{rge}{A vector containing minimum and maximum values of the response variable used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge =c(0,10000)}
+\item{rge}{Numeric vector with two values setting the minimum and maximum values of the response variable (e.g. NDVI) used in the analysis. We suggest the use of theoretically based limits. For example in the case of MODIS NDVI or EVI, it ranges from 0 to 10,000, so rge = c(0,10000)}
 }
 \value{
-A numeric vector of length = nGS, where each value represents the expected greeness at that date
+A numeric vector, where each value represents the expected greeness at that date
 }
 \description{
 Estimates the annual phenological cycle from a time series of vegetation greenness.
@@ -29,54 +29,50 @@ Derives the annual phenological cycle for a standard growing season using a nume
 }
 \examples{
 \dontshow{
-## Testing function with time series of Slovenian data (EVI)
+## Testing function with time series of Nothofagus macrocarpa (NDVI)
 # Load data
-phents<-read.table(system.file("extdata/date_tables/datats",package="npphen"),
-dec='.',sep='\t',header=TRUE)
+data("phents")
 # Phenology for the given data
-Phen(x=as.vector(phents$x),dates=phents$dates,h=1,nGS=23,rge=c(0,10000))
+Phen(x=phents$NDVI,dates=phents$dates,h=2,frequency = '16-days',rge=c(0,10000))
 }
 \donttest{
 library(lubridate)
 
-## Testing North Hemisphere data. Raster data from Slovenia (EVI index), h=1 ##
+## Testing raster data from Central Chile (NDVI), h=2##
 
 # Load data
-sl.path<-system.file("extdata/HN_slovenia",package="npphen")
-sl_rasters<-list.files(path=sl.path, pattern=glob2rx("slovenia*.tif"), full.names=TRUE)
-Slovenia_rasters<-stack(sl_rasters)
-sl_dates<-read.csv(system.file("extdata/date_tables/Slovenia_dates.csv", package="npphen"))
-Slovenia_dates <- as.Date(sl_dates$date, format='\%d/\%m/\%Y')
+#RasterStack
+data("MegaDrought_stack")
+#Dates
+data("modis_dates")
 
-# Generate a Raster time series using a raster stack and a date database from Slovenia
+#Creates Raster time series using a raster stack and a date database from Central Chile
 # Obtain data from a particular pixel generating a time series
-sl_pixel<-cellFromXY(Slovenia_rasters,c(474368,5096979))
-sl_pixelts<-as.numeric(Slovenia_rasters[sl_pixel])
-plot(Slovenia_dates,sl_pixelts, type='l')
+md_pixel <- cellFromXY(MegaDrought_stack,c(313395,6356610))
+md_pixelts <- as.numeric(MegaDrought_stack[md_pixel])
+plot(modis_dates,md_pixelts, type='l')
 
 # Phenology for the given pixel
-Phen(x=sl_pixelts,dates=Slovenia_dates,h=1,nGS=23,rge=c(0,10000))
+Phen(x=md_pixelts,dates=modis_dates,h=2,frequency='16-days',rge=c(0,10000))
 
-
-## Testing South Hemisphere data. Raster data from Chile (EVI index), h=2 ##
+## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 
 # Load data
-ay.path<-system.file("extdata/HS_aysen",package="npphen")
-ayrasters<-list.files(path=ay.path, pattern=glob2rx("aysen*.tif"), full.names=TRUE)
-Aysen_rasters<-stack(ayrasters)
-ay_dates<-read.csv(system.file("extdata/date_tables/Aysen_dates.csv", package="npphen"))
-Aysen_dates <- as.Date(ay_dates$date, format='\%d/\%m/\%Y')
+#RasterStack
+data("Bdesert_stack")
+#Dates
+data("modis_dates")
 
-# Generate a Raster time series using a raster stack and a date database from Aysen
+#Creates Raster time series using a raster stack and a date database from Northern Chile
 # Obtain data from a particular pixel generating a time series
-ay_pixel<-cellFromXY(Aysen_rasters,c(228373,4806975))
-ay_pixelts<-as.numeric(Aysen_rasters[ay_pixel])
-plot(Aysen_dates,ay_pixelts, type = 'l')
+bd_pixel<-cellFromXY(Bdesert_stack,c(286638,6852107))
+bd_pixelts<-as.numeric(Bdesert_stack[bd_pixel])
+plot(modis_dates,bd_pixelts, type = 'l')
 
 # Phenology for the given pixel
-Phen(x=ay_pixelts,dates=Aysen_dates,h=2,nGS=23,rge=c(0,10000))
+Phen(x=bd_pixelts,dates=modis_dates,h=2,frequency='16-days',rge=c(0,10000))
 }
 }
 \seealso{
-\code{\link{PhenMap}}
+\code{\link{PhenMap}},\code{\link{PhenKplot}}
 }

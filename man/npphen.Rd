@@ -12,12 +12,14 @@ The functions in this package estimate the expected annual phenological cycle fr
 Wand, M.P. & Jones, M.C. (1994) Kernel smoothing. Crc Press.
 }
 \seealso{
-\code{\link{Phen}}, \code{\link{PhenMap}}, \code{\link{PhenAnoma}}, \code{\link{PhenAnoMap}}, \code{\link{PhenKplot}}
+\code{\link{Phen}}, \code{\link{PhenMap}}, \code{\link{ExtremeAnom}}, \code{\link{ExtremeAnoMap}}, \code{\link{PhenKplot}}
 }
 \author{
-Roberto O. Chávez  \email{roberto.chavez.o@gmail.com}
+Roberto O. Chávez  \email{roberto.chavez.o@pucv.cl}
 \cr
 Sergio A. Estay  \email{sergio.estay@uach.cl}
+\cr
+José A. Lastra  \email{jose.lastra@pucv.cl}
 \cr
 Carlos G. Riquelme  \email{carlosriquelmemv@gmail.com}
 }

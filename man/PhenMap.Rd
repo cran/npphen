@@ -5,20 +5,21 @@
 \alias{PhenMap}
 \title{PhenMap}
 \usage{
-PhenMap(s, dates, h, nGS, nCluster, outname, format, datatype, rge)
+PhenMap(s, dates, h, frequency = "16-days", nCluster, outname, format,
+  datatype, rge)
 }
 \arguments{
-\item{s}{Raster stack with greenness (e,g. NDVI or EV) values}
+\item{s}{Raster stack of a vegetation index (e.g. LAI, NDVI, EVI) or any other variable with seasonal behavior. The code has been optimized to work with integer values. Please re-scale the input raster stack if necessary (e.g. NDVI ranging from 0.0000 to 1.0000, multiply by 10,000}
 
-\item{dates}{Vector with dates at which the greenness values were recorded}
+\item{dates}{A date vector. The number of dates must be equal to the number of "x" values (numeric input vector).}
 
 \item{h}{Numeric. Indicates the geographic hemisphere to define the starting date of the growing season. h=1 if the vegetation is in the Northern Hemisphere (season starting at January 1st), h=2 if it is in the Southern Hemisphere (season starting at July 1st)}
 
-\item{nGS}{Numeric. Number of greenness values within a single growing season. For example, nGS=23 for MODIS    Vegetation Index 16-days composites}
+\item{frequency}{Character string. Defines the number of samples for the output phenology and must be one of the this: 'daily' giving output vector of length 365, '8-days' giving output vector of length 46 (i.e MOD13Q1 and MYD13Q1), 'monthly' giving output vector of length 12,'bi-weekly' giving output vector of length 24 (i.e. GIMMS) or '16-days' (default) giving output vector of length 23 (i.e MOD13Q1 or MYD13Q1).}
 
 \item{nCluster}{Numeric. Number of CPU cores to be used for computational calculations}
 
-\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname="output_phen.tif". See \code{\link{writeRaster}}}
+\item{outname}{Character vector with the output path and filename with extension or only the filename and extension if work directory was set. For example outname = "output_phen.tif". See \code{\link{writeRaster}}}
 
 \item{format}{Character. Output file type. See \code{\link{writeFormats}}}
 
@@ -30,23 +31,22 @@ PhenMap(s, dates, h, nGS, nCluster, outname, format, datatype, rge)
 RasterStack
 }
 \description{
-Estimates annual Land Surface Phenology (LSP) using time series of  a vegetation greenness raster stack.
+Estimates annual Land Surface Phenology (LSP) using time series of a vegetation greenness raster stack.
 }
 \details{
-Derives the annual Land Surface Phenological (LSP) cycle for a standard growing season using a raster stack of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The LSP cycle is calculated for all pixels of the input raster stack in the same way as for the Phen function. The output is a multiband raster where every band is the expected greeness value at a given time step of the standard growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season (nGS) is 23 , and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required.
+Derives the annual Land Surface Phenological (LSP) cycle for a standard growing season using a raster stack of satellite based greenness values such as the Normalized Difference Vegetation Index (NDVI) or Enhanced Vegetation Index (EVI). The LSP cycle is calculated for all pixels of the input raster stack in the same way as for the \code{\link{Phen}} function. The output is a multiband raster where every band is the expected greenness value at a given time step of the standard growing season. For example, for MODIS Vegetation Index 16-days composites the number of time steps of the growing season is 23 (frequency = "16-days"), and therefore, the output raster will have 23 bands. A vector with dates for the greenness values is also required.
 }
 \examples{
 \dontrun{
 ##DEPENDING ON HARDWARE, THIS PROCESS CAN BE HIGHLY TIME CONSUMING##
 
-## Testing North Hemisphere data. Raster data from Slovenia (EVI index), h=1 ##
+## Testing raster data from Central Chile (NDVI), h=2##
 
 # Load data
-sl.path<-system.file("extdata/HN_slovenia",package="npphen")
-sl_rasters<-list.files(path=sl.path, pattern=glob2rx("slovenia*.tif"), full.names=TRUE)
-Slovenia_rasters<-stack(sl_rasters)
-sl_dates<-read.csv(system.file("extdata/date_tables/Slovenia_dates.csv", package="npphen"))
-Slovenia_dates <- as.Date(sl_dates$date, format='\%d/\%m/\%Y')
+#RasterStack
+data("MegaDrought_stack")
+#Dates
+data("modis_dates")
 
 # Making the LSP raster, n bands = 23
 
@@ -55,27 +55,28 @@ library(snow)
 # Define the number of cores to be use. In this example we use 1
 nc1<-1
 
-PhenMap(s=Slovenia_rasters,dates=Slovenia_dates,h=1,nGS=23, nCluster=nc1,
-outname="phen_slov.tif", format="GTiff", datatype="FLT4S",rge=c(0,10000))
-#map1<-raster("phen_slov.tif")#run only for load phenology brick
+PhenMap(s = MegaDrought_stack,dates = modis_dates,h = 2,
+frequency = '16-days',nCluster = nc1,outname = 'phen_MD.tif',
+format = 'GTiff',datatype = 'INT2S',rge = c(0,10000))
+#map1 <- stack("phen_MD.tif")#run only for load phenology brick
 #plot(map1)
 
-## Testing South Hemisphere data. Raster data from Chile (EVI index), h=2 ##
+## Testing with the Bdesert_stack from the Atacama Desert, Northern Chile (NDVI), h=2 ##
 
 # Load data
-ay.path<-system.file("extdata/HS_aysen",package="npphen")
-ayrasters<-list.files(path=ay.path, pattern=glob2rx("aysen*.tif"), full.names=TRUE)
-Aysen_rasters<-stack(ayrasters)
-ay_dates<-read.csv(system.file("extdata/date_tables/Aysen_dates.csv", package="npphen"))
-Aysen_dates <- as.Date(ay_dates$date, format='\%d/\%m/\%Y')
+RasterStack
+data("Bdesert_stack")
+#Dates
+data("modis_dates")
 
 # Making the LSP raster, n bands = 23
 # Define the number of cores to be use. In this example we use 1
 nc1<-1
 
-PhenMap(s= Aysen_rasters,dates=Aysen_dates,h=2,nGS=23, nCluster=nc1,
-outname="phen_aysen.tif", format="GTiff", datatype="FLT4S",rge=c(0,10000))
-#map2<-raster("phen_aysen.tif") #run only for load phenology brick
+PhenMap(s= Bdesert_stack,dates=modis_dates,h=2,
+frequency='16-days', nCluster=nc1,outname="phen_BD.tif", 
+format="GTiff", datatype="INT2S",rge=c(0,10000))
+#map2 <- stack("phen_BD.tif") #run only for load phenology brick
 #plot(map2)
 }
 }
