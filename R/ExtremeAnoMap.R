@@ -83,8 +83,11 @@ ExtremeAnoMap <-
       
       if(ref.min>=ref.max | ano.min>ano.max){stop("for refp or anop, lower value > upper value")}
       
-      if (all(is.na(x))) {
+      if (all(is.na(D2[,2])) & output != 'clean') {
         return(rep(NA,len2))
+      }
+      if (all(is.na(D2[,2])) & output == 'clean') {
+        return(rep(NA,ano.len))
       }
       
       DOY <- yday(dates)

@@ -2,7 +2,7 @@ Package: npphen
 Type: Package
 Title: Vegetation Phenological Cycle and Anomaly Detection using Remote
         Sensing Data
-Version: 1.5.0
+Version: 1.5.1
 Date: 2022-05-05
 Author: Roberto O. Chávez [cre, aut], Sergio A. Estay [cre, aut], José A. Lastra [cre,ctb] & Carlos G. Riquelme [ctb]
 Maintainer: José A. Lastra <jose.lastra@pucv.cl>
@@ -21,6 +21,6 @@ Encoding: UTF-8
 RoxygenNote: 7.1.2
 NeedsCompilation: no
 LazyData: true
-Packaged: 2022-05-23 12:52:40 UTC; josel
+Packaged: 2022-05-30 17:03:40 UTC; josel
 Repository: CRAN
-Date/Publication: 2022-05-24 10:40:02 UTC
+Date/Publication: 2022-06-02 12:40:02 UTC

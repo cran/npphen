@@ -127,8 +127,11 @@ ExtremeAnom <- function(x,dates,h,refp,anop,rge, output = 'both',rfd = 0.90){
     return(rep(NA,len2))
   }
   
-  if (all(is.na(D2[,2]))) {
+  if (all(is.na(D2[,2])) & output != 'clean') {
     return(rep(NA,len2))
+  }
+  if (all(is.na(D2[,2])) & output == 'clean') {
+    return(rep(NA,ano.len))
   }
   
   if(h!=1 && h!=2){stop("Invalid h")}
