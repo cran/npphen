@@ -181,8 +181,8 @@ ExtremeAnoMap <-
 
       na.sta <- first.no.NA.DOY-1
       na.end <- last.no.NA.DOY+1
-      h2d$cumDensity[1:na.sta,] <- NA
-      h2d$cumDensity[na.end:365,] <- NA
+      if(na.sta>=1) {h2d$cumDensity[1:na.sta,] <- NA}
+      if(na.end<=365) {h2d$cumDensity[na.end:365,] <- NA}
       
       if (h == 2) {
         for (i in 1:nrow(D2)) {
